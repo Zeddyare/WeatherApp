@@ -21,8 +21,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             WeatherAppTheme {
-                //CurrentWeather()
-                DailyForecast()
+                CurrentWeather()
+                //DailyForecast()
             }
         }
     }
