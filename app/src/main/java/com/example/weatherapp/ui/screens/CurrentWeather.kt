@@ -41,18 +41,18 @@ fun CurrentWeather() {
             .background(Color.White)
             .padding(vertical = 20.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.Top,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.LightGray)
-                .padding(horizontal = 10.dp, vertical = 5.dp),
-                horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "Halifax, Nova Scotia"
-            )
-        }
+//        Row(
+//            verticalAlignment = Alignment.Top,
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .background(Color.LightGray)
+//                .padding(horizontal = 10.dp, vertical = 5.dp),
+//                horizontalArrangement = Arrangement.Center
+//        ) {
+//            Text(
+//                text = "Halifax, Nova Scotia"
+//            )
+//        }
         Row(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier
