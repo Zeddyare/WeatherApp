@@ -16,14 +16,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.weatherapp.MainViewModel
 import com.example.weatherapp.R
-
+import com.example.weatherapp.models.Weather
+import com.example.weatherapp.models.Forecast
 
 //Requires the following:
 //a daily forecast for 3 or more days
@@ -37,90 +41,40 @@ import com.example.weatherapp.R
 //wind speed and direction
 //humidity
 
-@Preview
 @Composable
-fun DailyForecast() {
-    Column(
+fun DailyForecast(mainViewModel : MainViewModel) {
+    val weather by mainViewModel.weather.collectAsState()
 
+    Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
             .background(Color.White)
             .padding(vertical = 20.dp)
     ) {
-//        Row(
-//            verticalAlignment = Alignment.Top,
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .background(Color.LightGray)
-//                .padding(horizontal = 10.dp, vertical = 5.dp),
-//            horizontalArrangement = Arrangement.Center
-//        ) {
-//            Text(
-//                text = "Halifax, Nova Scotia"
-//            )
-//        }
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 5.dp)
-        ){
-            Image(
-                painter = painterResource(id = R.drawable.snowing),
-                contentDescription = "Snowy weather",
-                modifier = Modifier.size(200.dp)
-            )
-            Column(
-                horizontalAlignment = Alignment.Start,
+        weather?.forecast?.forEach { forecast ->
+            Row(
+                horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
-                    .padding(start = 16.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 5.dp)
             ) {
-                Text(
-                    text = "Monday, Dec 23\nHigh: -2°C Low: -10°C\nCondition: Snowing\nPrecipitation: 80% chance, 5cm\nWind: NW at 15 km/h\nHumidity: 85%"
+                Image(
+                    painter = painterResource(id = forecast.imageId),
+                    contentDescription = forecast.condition,
+                    modifier = Modifier.size(200.dp)
                 )
-            }
-
-        }
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 5.dp)
-        ){
-            Image(
-                painter = painterResource(id = R.drawable.sunny),
-                contentDescription = "Sunny weather",
-                modifier = Modifier.size(200.dp)
-            )
-            Column(
-                horizontalAlignment = Alignment.Start,
-                modifier = Modifier
-                    .padding(start = 16.dp)
-            ) {
-                Text(
-                    text = "Monday, Dec 23\nHigh: -2°C Low: -10°C\nCondition: Snowing\nPrecipitation: 80% chance, 5cm\nWind: NW at 15 km/h\nHumidity: 85%"
-                )
-            }
-        }
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 5.dp)
-        ){
-            Image(
-                painter = painterResource(id = R.drawable.rainy),
-                contentDescription = "Rainy weather",
-                modifier = Modifier.size(200.dp)
-            )
-            Column(
-                horizontalAlignment = Alignment.Start,
-                modifier = Modifier
-                    .padding(start = 16.dp)
-            ) {
-                Text(
-                    text = "Monday, Dec 23\nHigh: -2°C Low: -10°C\nCondition: Snowing\nPrecipitation: 80% chance, 5cm\nWind: NW at 15 km/h\nHumidity: 85%"
-                )
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                ) {
+                    Text(text = forecast.date)
+                    Text(text = "High: ${forecast.temperatureHigh} Low: ${forecast.temperatureLow}")
+                    Text(text = "Condition: ${forecast.condition}")
+                    Text(text = "Precipitation: ${forecast.precipitationProbability} chance, ${forecast.precipitationAmount} (${forecast.precipitationType})")
+                    Text(text = "Wind: ${forecast.wind}")
+                    Text(text = "Humidity: ${forecast.humidity}")
+                }
             }
         }
     }

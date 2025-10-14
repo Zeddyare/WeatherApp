@@ -30,16 +30,18 @@ import androidx.navigation.compose.rememberNavController
 import com.example.weatherapp.ui.screens.CurrentWeather
 import com.example.weatherapp.ui.screens.DailyForecast
 import com.example.weatherapp.ui.theme.WeatherAppTheme
+import androidx.activity.viewModels
 
 class MainActivity : ComponentActivity() {
+    private lateinit var mainViewModel: MainViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        mainViewModel = MainViewModel()
         setContent {
             WeatherAppTheme {
-                //CurrentWeather()
-                //DailyForecast()
-                DisplayUI()
+                DisplayUI(mainViewModel)
             }
         }
     }
@@ -47,7 +49,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DisplayUI() {
+fun DisplayUI(mainViewModel: MainViewModel) {
 
     val navController = rememberNavController()
     var selectedItem by remember { mutableIntStateOf(0) }
@@ -116,11 +118,11 @@ fun DisplayUI() {
         {
             composable(route = "current_weather")
             {
-                CurrentWeather()
+                CurrentWeather(mainViewModel)
             }
             composable(route = "daily_forecast")
             {
-                DailyForecast()
+                DailyForecast(mainViewModel)
             }
 
         }
