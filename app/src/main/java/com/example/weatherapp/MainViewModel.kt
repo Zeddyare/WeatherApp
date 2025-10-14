@@ -2,64 +2,64 @@ package com.example.weatherapp
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import com.example.weatherapp.models.Weather
 import com.example.weatherapp.models.Current
 import com.example.weatherapp.models.Forecast
+import com.example.weatherapp.R
 
-//Aid from AI in setting up inheritance from ViewModel class
-open class MainViewModel : ViewModel() {
+class MainViewModel : ViewModel() {
     private val _weather = MutableStateFlow<Weather?>(null)
-    val weather = _weather
-
+    val weather: StateFlow<Weather?> = _weather
 
     init {
-        val current = Current(
-            imageId = com.example.weatherapp.R.drawable.snowing,
-            condition = "Snowing",
-            temperature = "-2°C",
-            precipitationType = "Snow",
-            precipitationAmount = "5cm",
-            wind = "NE 35km/h"
-        )
-
-        val dailyForecasts = listOf(
-            Forecast(
-                date = "Monday, Dec 23",
-                imageId = com.example.weatherapp.R.drawable.snowing,
-                temperatureHigh = "-2°C",
-                temperatureLow = "-10°C",
-                condition = "Snowing",
-                precipitationType = "Snow",
-                precipitationAmount = "5cm",
-                precipitationProbability = "80%",
-                wind = "NW 15km/h",
-                humidity = "85%"
-            ),
-            Forecast(
-                date = "Tuesday, Dec 24",
-                imageId = com.example.weatherapp.R.drawable.sunny,
-                temperatureHigh = "2°C",
-                temperatureLow = "-5°C",
+        _weather.value = Weather(
+            current = Current(
+                imageId = R.drawable.sunny,
                 condition = "Sunny",
+                temperature = "18°C",
                 precipitationType = "None",
-                precipitationAmount = "0cm",
-                precipitationProbability = "10%",
-                wind = "W 10km/h",
-                humidity = "60%"
+                precipitationAmount = "0mm",
+                wind = "NW 10 km/h"
             ),
-            Forecast(
-                date = "Wednesday, Dec 25",
-                imageId = com.example.weatherapp.R.drawable.rainy,
-                temperatureHigh = "5°C",
-                temperatureLow = "1°C",
-                condition = "Rainy",
-                precipitationType = "Rain",
-                precipitationAmount = "10mm",
-                precipitationProbability = "90%",
-                wind = "S 20km/h",
-                humidity = "95%"
+            forecast = listOf(
+                Forecast(
+                    date = "Thursday Oct. 16",
+                    imageId = R.drawable.rainy,
+                    temperatureHigh = "10°C",
+                    temperatureLow = "-1°C",
+                    condition = "Raining",
+                    precipitationType = "Rain",
+                    precipitationAmount = "2mm",
+                    precipitationProbability = "30%",
+                    wind = "W 8 km/h",
+                    humidity = "65%"
+                ),
+                Forecast(
+                    date = "Friday Oct. 17",
+                    imageId = R.drawable.snowing,
+                    temperatureHigh = "2°C",
+                    temperatureLow = "-10°C",
+                    condition = "Snowing",
+                    precipitationType = "Snow",
+                    precipitationAmount = "8cm",
+                    precipitationProbability = "40%",
+                    wind = "SW 12 km/h",
+                    humidity = "70%"
+                ),
+                Forecast(
+                    date = "Saturday Oct. 18",
+                    imageId = R.drawable.rainy,
+                    temperatureHigh = "8°C",
+                    temperatureLow = "0°C",
+                    condition = "Raining",
+                    precipitationType = "Rain",
+                    precipitationAmount = "5mm",
+                    precipitationProbability = "80%",
+                    wind = "E 15 km/h",
+                    humidity = "85%"
+                )
             )
         )
-
     }
 }
