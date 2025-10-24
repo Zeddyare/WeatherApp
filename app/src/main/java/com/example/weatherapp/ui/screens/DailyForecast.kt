@@ -24,6 +24,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import com.example.weatherapp.MainViewModel
 import com.example.weatherapp.R
 import com.example.weatherapp.models.Weather
@@ -59,7 +61,7 @@ fun DailyForecast(mainViewModel : MainViewModel) {
                     .padding(horizontal = 5.dp)
             ) {
                 Image(
-                    painter = painterResource(id = forecast.imageId),
+                    painter = rememberAsyncImagePainter(forecast.imageId),
                     contentDescription = forecast.condition,
                     modifier = Modifier.size(200.dp)
                 )

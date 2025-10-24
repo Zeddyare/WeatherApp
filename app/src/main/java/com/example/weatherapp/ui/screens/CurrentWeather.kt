@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.example.weatherapp.MainViewModel
 import com.example.weatherapp.R
 
@@ -53,7 +54,7 @@ fun CurrentWeather(mainViewModel: MainViewModel) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Image(
-                    painter = painterResource(id = current.imageId),
+                    painter = rememberAsyncImagePainter(current.imageId),
                     contentDescription = current.condition,
                     modifier = Modifier.size(200.dp)
                 )
