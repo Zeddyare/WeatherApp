@@ -67,4 +67,8 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
     // Retrofit GSON Converter
     implementation("com.squareup.retrofit2:converter-gson:3.0.0")
+    //Google play services location
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+    //Accompanist Permissions (makes getting permissions easier)
+    implementation("com.google.accompanist:accompanist-permissions:0.34.0")
 }

@@ -27,7 +27,7 @@ class MainViewModel : ViewModel() {
 
     init {
         //fetch weather from API
-        fetchWeather("Halifax", 3)
+        fetchWeather("Lunenburg", 3)
     }
 
     fun fetchWeather(location: String, days: Int) {
