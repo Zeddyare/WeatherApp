@@ -1,10 +1,6 @@
+// kotlin
 package com.example.weatherapp.ui.screens
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,69 +9,83 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import com.example.weatherapp.MainViewModel
-import com.example.weatherapp.R
-import com.example.weatherapp.models.Weather
-import com.example.weatherapp.models.Forecast
-
-//Requires the following:
-//a daily forecast for 3 or more days
-
-//Each forecast should include:
-//date
-//weather image
-//temperature high and low for the day
-//condition
-//precipitation type, amount, and chance
-//wind speed and direction
-//humidity
 
 @Composable
-fun DailyForecast(mainViewModel : MainViewModel) {
+fun DailyForecast(mainViewModel: MainViewModel) {
     val weather by mainViewModel.weather.collectAsState()
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
-            .background(Color.White)
-            .padding(vertical = 20.dp)
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
     ) {
-        weather?.forecast?.forEach { forecast ->
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 5.dp)
-            ) {
-                Image(
-                    painter = rememberAsyncImagePainter(forecast.imageId),
-                    contentDescription = forecast.condition,
-                    modifier = Modifier.size(200.dp)
-                )
-                Column(
-                    horizontalAlignment = Alignment.Start,
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(vertical = 20.dp)
+        ) {
+            weather?.forecast?.forEach { forecast ->
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .padding(start = 16.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 5.dp, vertical = 8.dp)
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(12.dp)
                 ) {
-                    Text(text = forecast.date)
-                    Text(text = "High: ${forecast.temperatureHigh} Low: ${forecast.temperatureLow}")
-                    Text(text = "Condition: ${forecast.condition}")
-                    Text(text = "Precipitation: ${forecast.precipitationProbability} chance, ${forecast.precipitationAmount} (${forecast.precipitationType})")
-                    Text(text = "Wind: ${forecast.wind}")
-                    Text(text = "Humidity: ${forecast.humidity}")
+                    androidx.compose.foundation.Image(
+                        painter = rememberAsyncImagePainter(forecast.imageId),
+                        contentDescription = forecast.condition,
+                        modifier = Modifier.size(80.dp)
+                    )
+                    Column(
+                        horizontalAlignment = Alignment.Start,
+                        modifier = Modifier
+                            .padding(start = 16.dp)
+                    ) {
+                        Text(
+                            text = forecast.date,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            style = MaterialTheme.typography.titleSmall
+                        )
+                        Text(
+                            text = "High: ${forecast.temperatureHigh} Low: ${forecast.temperatureLow}",
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.95f),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Text(
+                            text = "Condition: ${forecast.condition}",
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f),
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                        Text(
+                            text = "Precipitation: ${forecast.precipitationProbability} chance, ${forecast.precipitationAmount}",
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                        Text(
+                            text = "Wind: ${forecast.wind}",
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                        Text(
+                            text = "Humidity: ${forecast.humidity}",
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
                 }
             }
         }

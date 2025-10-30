@@ -71,4 +71,6 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.0.1")
     //Accompanist Permissions (makes getting permissions easier)
     implementation("com.google.accompanist:accompanist-permissions:0.34.0")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 }
