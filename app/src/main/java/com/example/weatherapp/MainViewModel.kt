@@ -1,5 +1,6 @@
 package com.example.weatherapp
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,8 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import com.example.weatherapp.services.WeatherService
 import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
-
+class MainViewModel: ViewModel() {
     //retrofit
     val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl("https://api.weatherapi.com/")
@@ -26,11 +26,12 @@ class MainViewModel : ViewModel() {
 
 
     init {
-        //fetch weather from API
-        fetchWeather("Lunenburg", 3)
+        fetchWeather("Halifax", 3)
     }
 
+
     fun fetchWeather(location: String, days: Int) {
+
         //use coroutine to fetch weather
         viewModelScope.launch {
             val fetchedWeather = weatherService.getWeather(location = location, days = days)

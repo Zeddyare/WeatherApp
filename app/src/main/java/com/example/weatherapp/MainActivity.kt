@@ -7,7 +7,6 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -24,17 +23,16 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.compose.NavHost
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.weatherapp.ui.screens.CurrentWeather
 import com.example.weatherapp.ui.screens.DailyForecast
 import com.example.weatherapp.ui.theme.WeatherAppTheme
-import androidx.activity.viewModels
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import com.google.accompanist.permissions.isGranted
@@ -44,32 +42,33 @@ import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
+
 class MainActivity : ComponentActivity() {
     private lateinit var mainViewModel: MainViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         mainViewModel = MainViewModel()
         setContent {
-            WeatherAppTheme {
-                GetLocation()
-                DisplayUI(mainViewModel)
+            var isDark by remember { mutableStateOf(false) }
+
+            WeatherAppTheme(darkTheme = isDark) {
+                GetLocation(mainViewModel)
+                DisplayUI(mainViewModel = mainViewModel, isDark = isDark, onToggleTheme = { isDark = !isDark })
             }
         }
     }
 }
 
+//Function from brightspace
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun GetLocation() {
-    // Remember the permission state(asking for Fine location)
+fun GetLocation(mainViewModel: MainViewModel) {
     val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
 
     if (permissionState.status.isGranted) {
-        Log.i("TESTING", "Hurray, permission granted!")
-
-        // Get Location
         val currentContext = LocalContext.current
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(currentContext)
 
@@ -79,38 +78,31 @@ fun GetLocation() {
             ) == PackageManager.PERMISSION_GRANTED)
         {
             val cancellationTokenSource = CancellationTokenSource()
-
-            Log.i("TESTING", "Requesting location...")
-
             fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cancellationTokenSource.token)
                 .addOnSuccessListener { location ->
                     if (location != null) {
                         val lat = location.latitude.toString()
                         val lng = location.longitude.toString()
-
-                        Log.i("TESTING", "Success: $lat $lng")
-
                         val coordinates = "$lat,$lng"
-
-                        // call a function, like in View Model, to do something with location...
-                    }
-                    else {
-                        Log.i("TESTING", "Problem encountered: Location returned null")
+                        Log.i("LOCATION", "coords: $coordinates")
+                        // pass coords into ViewModel to trigger API call (AI Help)
+                        mainViewModel.fetchWeather(coordinates, 3)
+                    } else {
+                        Log.i("LOCATION", "Location returned null")
                     }
                 }
         }
-    }
-    else {
-        // Run a side-effect (coroutine) to get permission. The permission popup.
+    } else {
         LaunchedEffect(permissionState){
             permissionState.launchPermissionRequest()
         }
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DisplayUI(mainViewModel: MainViewModel) {
+fun DisplayUI(mainViewModel: MainViewModel, isDark: Boolean, onToggleTheme: () -> Unit) {
 
     val navController = rememberNavController()
     var selectedItem by remember { mutableIntStateOf(0) }
@@ -123,7 +115,17 @@ fun DisplayUI(mainViewModel: MainViewModel) {
                     titleContentColor = MaterialTheme.colorScheme.primary
                 ),
                 title = {
-                    Text("Halifax, Nova Scotia")
+                    Text("Weather or Not")
+                }, 
+                actions = {
+                    IconButton(onClick = onToggleTheme) {
+
+                        val iconRes = if (isDark) R.drawable.outline_brightness_5_24 else R.drawable.outline_brightness_4_24
+                        Icon(
+                            painter = painterResource(iconRes),
+                            contentDescription = "Toggle Theme"
+                        )
+                    }
                 }
             )
         },

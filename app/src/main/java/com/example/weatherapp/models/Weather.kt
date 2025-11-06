@@ -6,9 +6,13 @@ package com.example.weatherapp.models
 import com.google.gson.annotations.SerializedName
 
 data class Weather(
+    @SerializedName("location") private val _location: LocationJson?,
     @SerializedName("current") private val _current: CurrentJson?,
     @SerializedName("forecast") private val _forecast: ForecastContainerJson?
 ) {
+    val location: Location?
+        get() = _location?.toDomain()
+
     val current: Current?
         get() = _current?.toDomain()
 
@@ -16,9 +20,32 @@ data class Weather(
         get() = _forecast?.forecastday?.map { it.toDomain() }
 }
 
-/* JSON-shaped nested classes (private-ish) that match WeatherAPI keys.
-   They provide mapping functions to convert into UI-friendly domain data. */
+data class LocationJson(
+    @SerializedName("name") val name: String?,
+    @SerializedName("region") val region: String?,
+    @SerializedName("country") val country: String?,
+    @SerializedName("lat") val lat: Double?,
+    @SerializedName("lon") val lon: Double?,
+    @SerializedName("tz_id") val tzId: String?
+) {
+    fun toDomain() = Location(
+        name = name ?: "Unknown",
+        region = region ?: "",
+        country = country ?: "",
+        lat = lat ?: 0.0,
+        lon = lon ?: 0.0,
+        tzId = tzId ?: ""
+    )
+}
 
+data class Location(
+    val name: String,
+    val region: String,
+    val country: String,
+    val lat: Double,
+    val lon: Double,
+    val tzId: String
+)
 data class CurrentJson(
     @SerializedName("temp_c") val tempC: Double?,
     @SerializedName("condition") val condition: ConditionJson?,
