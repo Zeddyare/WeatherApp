@@ -62,6 +62,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+//Function from brightspace
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun GetLocation(mainViewModel: MainViewModel) {
@@ -84,7 +85,7 @@ fun GetLocation(mainViewModel: MainViewModel) {
                         val lng = location.longitude.toString()
                         val coordinates = "$lat,$lng"
                         Log.i("LOCATION", "coords: $coordinates")
-                        // pass coords into ViewModel to trigger API call
+                        // pass coords into ViewModel to trigger API call (AI Help)
                         mainViewModel.fetchWeather(coordinates, 3)
                     } else {
                         Log.i("LOCATION", "Location returned null")
